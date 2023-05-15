@@ -1,23 +1,23 @@
-node{
-    git branch: 'master' , url: 'https://github.com/hadeelharidy88/jenkines-pipeline.git'
-    stage('build'){
-        try{
-            sh'echo "build stage"'
-        }
-
-        catch(Exception e){
-            sh'echo "exception found"'
-            throw e
-        }
+pipeline{
+    agent {
+       label 'aws-agent'
     }
 
-    stage('test'){
-        if(env.BRANCH_NAME== 'feature'){
-            sh'ech "test stage"'
+    stages{
+        stage('build'){
+            steps{
+                script{
+                    sh 'mvn clean package'
+                }
+            }
         }
 
-        else{
-            sh'echo "skip test stage"'
+        stage('test'){
+            steps{
+                script{
+                    echo "test stage"
+                }
+            }
         }
     }
 }
