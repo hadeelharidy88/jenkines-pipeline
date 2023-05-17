@@ -1,5 +1,7 @@
 pipeline{
-    agent any
+    agent{
+        label 'aws-agent'
+    }
 
     stages{
         stage('build'){
@@ -17,5 +19,18 @@ pipeline{
                 }
             }
         }
+
+        
     }
+
+post {
+  success {
+    slackSend channel: '#jenkins-ci', message: "Build Success- ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", teamDomain: 'hadeelheadquarters', tokenCredentialId: 'slack-notifications'
+  }
+
+  failure {
+    slackSend channel: '#jenkins-ci', message: "Build Failed- ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", teamDomain: 'hadeelheadquarters', tokenCredentialId: 'slack-notifications'
+  }
+}
+
 }
