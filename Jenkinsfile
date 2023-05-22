@@ -28,14 +28,10 @@ pipeline{
         stage('deploy'){
             steps{
                 script{
-                    withAWS(credentials: 'AWS-CLI', region: 'us-east-1') {
-                        
-                        sh "echo '${eksToken}' | kubectl config set-credentials eks-user --token=''"
-                        sh "kubectl config set-context eks-context --cluster=${eksClusterName} --user=eks-user"
-                        sh "kubectl config use-context eks-context"
-                        sh "kubectl apply -f ./k8s/deployment.yaml"
-}
-
+                    withAWS(credentials: 'AWS-CLI', region: 'us-east-1'){
+                        sh 'aws eks update-kubeconfig --region us-east-1 --name EKS'
+                        sh 'kubectl apply -f ./k8s/deployment.yaml --kubeconfig=$HOME/.kube/config'
+                    }
 
                 }
             }
