@@ -16,8 +16,7 @@ pipeline{
             steps{
                 script{
                     withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'Password ', usernameVariable: 'Username ')]){
-                        sh 'echo $Password | sudo docker login --username $Username --password-stdin
-'
+                        sh 'docker login --username $Username --password-stdin $Password'
                         sh 'docker tag java-app $Username/java-app'
                         sh 'docker push $Username/java-app'
                     }
