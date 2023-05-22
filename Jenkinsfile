@@ -2,6 +2,11 @@ pipeline{
     agent{
         label 'aws-agent'
     }
+
+    environment {
+        KUBECONFIG = "/path/to/kubeconfig.yaml"
+    }
+
     stages{
         stage('build'){
             steps{
