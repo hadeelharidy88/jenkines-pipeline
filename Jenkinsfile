@@ -29,11 +29,7 @@ pipeline{
             steps{
                 script{
                     withAWS(credentials: 'AWS-CLI', region: 'us-east-1') {
-                        def eksClusterName = "EKS"
-                        def eksTokenCommand = "aws eks get-token --cluster-name ${eksClusterName} --region us-east-1 --output json"
-                        def eksTokenOutput = sh(returnStdout: true, script: eksTokenCommand).trim()
-                        def eksToken = readJSON(text: eksTokenOutput).status.token
-
+                        
                         sh "echo '${eksToken}' | kubectl config set-credentials eks-user --token=''"
                         sh "kubectl config set-context eks-context --cluster=${eksClusterName} --user=eks-user"
                         sh "kubectl config use-context eks-context"
