@@ -28,10 +28,14 @@ pipeline{
         stage('deploy'){
             steps{
                 script{
-                    withAWS(credentials: 'AWS-CLI', region: 'us-east-1'){
+                    withAWS(credentials: 'AWS-CLI', region: 'us-east-1') {
                         sh 'aws eks update-kubeconfig --region us-east-1 --name EKS'
+                        sh 'kubectl config set-credentials my-user --exec-command aws --exec-api-version client.authentication.k8s.io/v1beta1 --exec-arg=eks --exec-arg=get-token --exec-arg=--cluster-name=EKS --exec-arg=--region=us-east-1'
+                        sh 'kubectl config set-context my-context --cluster=EKS --user=my-user'
+                        sh 'kubectl config use-context my-context'
                         sh 'kubectl apply -f ./k8s/deployment.yaml'
-                    }
+}
+
 
                 }
             }
