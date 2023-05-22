@@ -25,17 +25,17 @@ pipeline{
             }
         }
 
-        stage('deploy'){
-            steps{
-                script{
-                    withAWS(credentials: 'AWS-CLI', region: 'us-east-1'){
-                        sh 'aws eks update-kubeconfig --region us-east-1 --name EKS'
-                        sh 'kubectl apply -f ./k8s/deployment.yaml'
-                    }
-
-                }
+        stage('deploy') {
+    steps {
+        script {
+            withAWS(credentials: 'AWS-CLI', region: 'us-east-1') {
+                sh 'aws eks --region us-east-1 update-kubeconfig --name EKS --kubeconfig /tmp/kubeconfig'
+                sh 'export KUBECONFIG=/tmp/kubeconfig'
+                sh 'kubectl apply -f ./k8s/deployment.yaml'
             }
         }
+    }
+}
 
         
         }
