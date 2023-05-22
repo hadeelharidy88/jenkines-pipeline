@@ -25,16 +25,7 @@ pipeline{
             }
         }
 
-        stage('Configure Kubeconfig') {
-           steps {
-              script {
-                 withAWS(credentials: 'AWS-CLI', region: 'us-east-1') {
-                   sh 'aws eks --region us-east-1 update-kubeconfig --name EKS --kubeconfig /tmp/kubeconfig'
-                   env.KUBECONFIG = '/tmp/kubeconfig'
-      }
-    }
-  }
-}
+        
 
         stage('deploy'){
             steps{
